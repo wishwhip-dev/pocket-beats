@@ -337,7 +337,7 @@ export function DrumMachine() {
 
   const shareTitle = `${name.trim() || "Untitled pattern"} · ${identity.name}`;
 
-  const positionText = playing && displayStep !== null ? `Step ${displayStep + 1} / ${STEP_COUNT}` : "Stopped";
+  const positionText = playing ? `Step ${(displayStep ?? 0) + 1} / ${STEP_COUNT}` : "Stopped";
   const soundText =
     audio === "running"
       ? "Sound is on."
@@ -482,7 +482,7 @@ export function DrumMachine() {
             </div>
             {TRACKS.map((track, row) => (
               <div key={track.id} className="mb-1 flex items-center gap-1 last:mb-0">
-                <div className="sticky left-0 z-10 flex w-28 shrink-0 items-center justify-between gap-1 bg-card pr-2">
+                <div className="sticky left-0 z-20 flex w-28 shrink-0 items-center justify-between gap-1 bg-card pr-2">
                   <span className="text-sm font-medium">{track.label}</span>
                   <Button
                     variant="ghost"
