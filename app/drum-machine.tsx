@@ -162,11 +162,6 @@ export function DrumMachine() {
     }
   }, []);
 
-  const nameRef = useRef(name);
-  useEffect(() => {
-    nameRef.current = name;
-  }, [name]);
-
   const tick = useCallback(() => {
     const ctx = getAudioContext();
     if (!ctx) return;
