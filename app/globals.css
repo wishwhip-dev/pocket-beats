@@ -1,0 +1,103 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/*
+ * Tokens first, then the theme mapping, then the base rules. Nothing else is global.
+ *
+ * Under Tailwind v4 a utility only exists if the theme declares it, so `@theme inline` is not
+ * decoration — without it `bg-background`, `text-muted-foreground` and `bg-primary` are not
+ * classes at all, and every shadcn component renders unstyled.
+ *
+ * Dark, because a drawing reads best on a dark ground and most of what this template is for —
+ * games, generative art, simulations — is designed that way. Retheme by editing the values below.
+ * A canvas does not see these tokens: read them in `start` with
+ * `getComputedStyle(document.documentElement).getPropertyValue("--primary")` if the drawing should
+ * follow the theme.
+ */
+
+:root {
+  /* One dark palette on :root. No `.dark` class and no `dark:` variants: they never activate here. */
+  color-scheme: dark;
+
+  --background: #0b0c0e;
+  --foreground: #ededf0;
+
+  --card: #121317;
+  --card-foreground: #ededf0;
+  --popover: #16181c;
+  --popover-foreground: #ededf0;
+
+  /* The one accent. */
+  --primary: #a9d977;
+  --primary-foreground: #0b0c0e;
+
+  --secondary: #1b1d22;
+  --secondary-foreground: #ededf0;
+
+  /* `--muted` is a *background* in shadcn's vocabulary; muted text is `--muted-foreground`. */
+  --muted: #1b1d22;
+  --muted-foreground: #9a9aa5;
+
+  /* Likewise `--accent` is a hover surface, not the accent colour. */
+  --accent: #1f2228;
+  --accent-foreground: #ededf0;
+
+  --destructive: #ff6b63;
+  --destructive-foreground: #0b0c0e;
+
+  --border: #24262b;
+  --input: #24262b;
+  --ring: #a9d977;
+
+  --chart-1: #a9d977;
+  --chart-2: #6cc4d6;
+  --chart-3: #d69c6c;
+  --chart-4: #a48cd8;
+  --chart-5: #d87f9c;
+
+  --radius: 0.625rem;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+}
