@@ -120,6 +120,9 @@ export function DrumMachine() {
   useEffect(() => {
     volumeRef.current = volume;
   }, [volume]);
+  useEffect(() => {
+    nameRef.current = name;
+  }, [name]);
 
   // Restore the saved pattern, name, tempo and volume after mount. Reading storage during
   // render would break hydration, and the read happens in a microtask so the first paint is
