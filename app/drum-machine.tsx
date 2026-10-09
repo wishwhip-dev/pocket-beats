@@ -339,5 +339,144 @@ export function DrumMachine() {
 
   const shareTitle = `${name.trim() || "Untitled pattern"} · ${identity.name}`;
 
-  // JSX_APPEND_BELOW
+  const positionText = playing && displayStep !== null ? `Step ${displayStep + 1} / ${STEP_COUNT}` : "Stopped";
+  const soundText =
+    audio === "running"
+      ? "Sound is on."
+      : audio === "suspended"
+        ? "Sound is paused. Press Play to enable it."
+        : audio === "unsupported"
+          ? "Sound is not available in this browser."
+          : audio === "closed"
+            ? "Sound has been closed."
+            : "Sound starts when you press Play.";
+
+  return (
+    <div className="flex flex-col gap-5">
+      <section aria-label="Transport and pattern controls" className="flex flex-wrap items-center gap-2">
+        <Button size="lg" className="min-w-32" onClick={handlePlayStop}>
+          {playing ? <Square className="h-4 w-4" aria-hidden="true" /> : <Play className="h-4 w-4" aria-hidden="true" />}
+          {playing ? "Stop" : "Play"}
+        </Button>
+        <Button variant="outline" onClick={clearPattern}>
+          Clear pattern
+        </Button>
+        <Button variant="outline" onClick={randomize}>
+          Randomize
+        </Button>
+        {lastCleared && (
+          <Button variant="ghost" onClick={undoClear}>
+            Undo clear
+          </Button>
+        )}
+      </section>
+
+      <dl
+        aria-label="Machine state"
+        className="grid grid-cols-2 gap-3 rounded-xl border border-border bg-card p-4 text-sm sm:grid-cols-4"
+      >
+        <div>
+          <dt className="text-muted-foreground">State</dt>
+          <dd className="font-semibold">{playing ? "Playing" : "Stopped"}</dd>
+        </div>
+        <div>
+          <dt className="text-muted-foreground">Position</dt>
+          <dd className="font-semibold">{positionText}</dd>
+        </div>
+        <div>
+          <dt className="text-muted-foreground">Tempo</dt>
+          <dd className="font-semibold">{tempo} BPM</dd>
+        </div>
+        <div>
+          <dt className="text-muted-foreground">Volume</dt>
+          <dd className="font-semibold">{volume}%</dd>
+        </div>
+      </dl>
+
+      <p aria-live="polite" className="text-sm text-muted-foreground">
+        {soundText}
+      </p>
+      {soundProblem && <p className="text-sm text-destructive">{soundProblem}</p>}
+      {storageProblem && <p className="text-sm text-destructive">{storageProblem}</p>}
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="tempo-slider">Tempo</Label>
+          <div className="flex items-center gap-3">
+            <Slider
+              id="tempo-slider"
+              min={MIN_TEMPO}
+              max={MAX_TEMPO}
+              step={1}
+              value={[tempo]}
+              onValueChange={(values) => handleTempo(values[0] ?? tempo)}
+              className="flex-1"
+              aria-label="Tempo in BPM"
+            />
+            <span className="w-20 text-right text-sm tabular-nums">{tempo} BPM</span>
+          </div>
+        </div>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="volume-slider">Master volume</Label>
+          <div className="flex items-center gap-3">
+            <Slider
+              id="volume-slider"
+              min={0}
+              max={100}
+              step={1}
+              value={[volume]}
+              onValueChange={(values) => handleVolume(values[0] ?? volume)}
+              className="flex-1"
+              aria-label="Master volume percent"
+            />
+            <span className="w-20 text-right text-sm tabular-nums">{volume}%</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="preset-picker">Preset pattern</Label>
+          <Select value={presetName} onValueChange={choosePreset}>
+            <SelectTrigger id="preset-picker" className="w-full">
+              <SelectValue placeholder="Choose a pattern" />
+            </SelectTrigger>
+            <SelectContent>
+              {PRESETS.map((preset) => (
+                <SelectItem key={preset.name} value={preset.name}>
+                  {preset.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="pattern-name">Pattern name</Label>
+          <Input
+            id="pattern-name"
+            value={name}
+            onChange={(event) => handleName(event.target.value)}
+            placeholder="Untitled pattern"
+            maxLength={60}
+          />
+        </div>
+      </div>
+
+      {/* GRID_APPEND_BELOW */}
+
+      <ShareButton
+        label="Share pattern"
+        title={shareTitle}
+        text={`A ${tempo} BPM beat made in ${identity.name}`}
+        filename="pocket-beat.png"
+        makeImage={() =>
+          renderPatternCard({
+            name,
+            tempo,
+            rows: TRACKS.map((track, row) => ({ label: track.label, steps: pattern[row] })),
+          })
+        }
+      />
+    </div>
+  );
 }
