@@ -1,0 +1,20 @@
+# Plan
+
+Goal: A tiny drum machine. A 4x16 step grid for kick, snare, hat and clap; press Play to hear the loop at a tempo I can change; tap steps to toggle them; a Share button that makes an image of my pattern with its name so I can post it to Stories.
+
+1. The home page at / renders the whole drum machine directly, with no sign-in, URL parameter or navigation: four rows labelled Kick, Snare, Hat and Clap, each with 16 step cells (64 toggle buttons in all), and a built-in demo pattern is already active on first visit so the grid is not empty. Every cell toggles by pointer and by keyboard (Enter or Space) with a visible active/inactive state.
+2. Pressing Play starts the loop from step 1 through the shared AudioContext, so no sound occurs before this click; the current step column highlights as it advances, a text readout shows the position (for example Step 5 / 16), and the button becomes Stop, which halts playback. Pressing Play again restarts from step 1.
+3. Each row triggers its own synthesized drum voice (kick, snare, closed hat, clap) built with Web Audio oscillators and noise in a lib module rather than audio files, and each row also has a preview button that plays that one drum immediately even when the sequencer is stopped.
+4. A tempo slider from 60 to 180 BPM shows its current value as text next to it, and changing the tempo while the loop is playing takes effect on the next beat without stopping playback.
+5. A master volume slider from 0 to 100 percent shows its value beside it; at 0 the running loop is silent, and the playing/stopped and volume state are always readable as text on the page, not only as pixels.
+6. A preset picker offers at least 6 named patterns (such as Four on the floor, Boom bap, Breakbeat, Trap, House and Halftime) stored as data in lib/presets.ts, separate from the grid component; choosing one fills all 64 cells and puts the preset name into the name field.
+7. A Clear pattern button empties all 64 cells immediately and its label says Clear; a Randomize button fills the grid with a fresh pattern in which every track has at least one active step and at least 8 cells in total are active.
+8. A text field names the pattern, and pressing Share draws a portrait story-sized image (1080 by 1920) showing the pattern grid with its name, the tempo and the app name, then hands it to the share sheet, and only on that button press; an empty name field is rendered on the image as Untitled pattern.
+9. Where the device has no share sheet, Share saves the same image as a PNG download instead, and the outcome (shared, saved or refused) is reported as text on the page either way.
+10. The current pattern, its name, tempo and volume are saved to localStorage under a key named for this app, and reloading the page restores all of them; when storage is empty or unreadable the app falls back to the demo pattern and default tempo and volume.
+11. On a phone-width screen the 16 step columns remain usable: the grid scrolls horizontally as one block with cells at least 40px square, while the transport, tempo, name and Share controls stay visible without scrolling.
+12. app/identity.ts names the app and describes it as a four-track step sequencer with sharing, and the browser tab title and share metadata read that name.
+13. Toggling any step while the loop is playing takes effect audibly the next time the playhead reaches that step, without stopping or restarting playback; clearing, randomizing or choosing a preset during playback swaps the pattern under the running playhead rather than breaking it.
+14. Reloading the page while the loop is playing returns to the saved pattern with the sequencer stopped, so sound never resumes without a click; the tempo slider still works at its exact limits of 60 and 180 BPM.
+
+These are the outcomes this task is judged against.
