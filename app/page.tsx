@@ -1,4 +1,5 @@
 import { DrumMachine } from "./drum-machine";
+import { identity } from "./identity";
 
 /**
  * The drum machine. A server component on purpose: the heading and description render on the
