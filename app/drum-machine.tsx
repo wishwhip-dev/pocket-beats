@@ -462,7 +462,66 @@ export function DrumMachine() {
         </div>
       </div>
 
-      {/* GRID_APPEND_BELOW */}
+      <section aria-label="Step grid" className="flex flex-col gap-2">
+        <p className="text-sm text-muted-foreground">
+          Tap a step to toggle it. The focused step toggles with Enter or Space, and the lit column is the one sounding.
+        </p>
+        <div className="overflow-x-auto rounded-xl border border-border bg-card p-3">
+          <div className="min-w-max">
+            <div className="mb-2 flex items-center gap-1">
+              <div className="w-28 shrink-0" aria-hidden="true" />
+              {Array.from({ length: STEP_COUNT }, (_, step) => (
+                <div
+                  key={step}
+                  className={cn(
+                    "w-10 shrink-0 text-center text-[10px] font-medium text-muted-foreground",
+                    step % 4 === 0 && step > 0 && "ml-2",
+                  )}
+                >
+                  {step % 4 === 0 ? step / 4 + 1 : "·"}
+                </div>
+              ))}
+            </div>
+            {TRACKS.map((track, row) => (
+              <div key={track.id} className="mb-1 flex items-center gap-1 last:mb-0">
+                <div className="sticky left-0 z-10 flex w-28 shrink-0 items-center justify-between gap-1 bg-card pr-2">
+                  <span className="text-sm font-medium">{track.label}</span>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-10 w-10"
+                    aria-label={`Preview ${track.label.toLowerCase()} drum`}
+                    onClick={() => handlePreview(track.id)}
+                  >
+                    <Play className="h-4 w-4" aria-hidden="true" />
+                  </Button>
+                </div>
+                {Array.from({ length: STEP_COUNT }, (_, step) => {
+                  const on = pattern[row][step];
+                  const isCurrent = playing && displayStep === step;
+                  return (
+                    <button
+                      key={step}
+                      type="button"
+                      aria-pressed={on}
+                      aria-label={`${track.label} step ${step + 1}, ${on ? "on" : "off"}`}
+                      onClick={() => toggleStep(row, step)}
+                      className={cn(
+                        "h-10 w-10 shrink-0 rounded-md border transition-colors",
+                        step % 4 === 0 && step > 0 && "ml-2",
+                        on
+                          ? "border-primary bg-primary"
+                          : "border-border bg-muted/50 hover:bg-muted",
+                        isCurrent && "z-10 ring-2 ring-ring",
+                      )}
+                    />
+                  );
+                })}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       <ShareButton
         label="Share pattern"
