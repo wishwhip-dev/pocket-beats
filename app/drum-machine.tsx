@@ -104,6 +104,7 @@ export function DrumMachine() {
   const patternRef = useRef<Pattern>(pattern);
   const tempoRef = useRef(tempo);
   const volumeRef = useRef(volume);
+  const nameRef = useRef(name);
   const loadedRef = useRef(false);
   const timerRef = useRef<number | null>(null);
   const nextTimeRef = useRef(0);
